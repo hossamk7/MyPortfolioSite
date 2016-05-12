@@ -24,6 +24,7 @@ app.get("/pictures/:id", function(req, res) {
 
 app.get("/pictures/:id/comments/new", function(req, res) {
    //new comments form 
+   res.render("comments/new.ejs");
 });
 
 app.post("/pictures/:id/comments", function(req, res){
