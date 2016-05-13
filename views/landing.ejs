@@ -1,7 +1,38 @@
-<% include partials/header.ejs %>
+<!DOCTYPE>
+<html>
+<head>
+    <title>My Travel Blog</title>    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/landing.css">
+</head>
 
-<h1>LANDING PAGE!</h1>
-
-<a href="/home" class="btn btn-default btn-info">Enter Site</a>
-
-<% include partials/footer.ejs%>
+<body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Travel Pics</a>
+        </div>
+          <ul class="nav navbar-nav">
+            <li><a href="#">Home <span class="sr-only">(current)</span></a></li>
+            <li><a href="#">Link</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+              <li><a href="#">Log In</a></li>
+            <li><a href="#">Sign Up</a></li>
+          </ul>
+      </div><!-- /.container-fluid -->
+    </nav> <!-- end of nav bar -->
+    
+    <div class="container-fluid">
+        <div class="container">
+            
+            <div id="main-text">
+                <h1>My Travels</h1>
+                <a href="/home" class="btn btn-lg btn-info">Enter Site</a>
+                <div>HK2016</div>
+            </div>
+        </div>
+       
+    </div>
+</body>
+</html>

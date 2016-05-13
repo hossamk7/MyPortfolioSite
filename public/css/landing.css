@@ -1,0 +1,36 @@
+body{
+    background: url("https://images.unsplash.com/photo-1460500063983-994d4c27756c?crop=entropy&fit=crop&fm=jpg&h=650&ixjsv=2.1.0&ixlib=rb-0.3.5&q=80&w=1375");
+    color: white;
+    background-position: center;
+    background-size: cover;
+}
+
+h1{
+    text-align: center;
+    font-size: 5em;
+    text-shadow: 1px 1px 2px black,
+                 -1px -1px 2px blue,
+                 3px 2px 2px black;
+}
+
+#main-text{
+    text-align: center;
+    padding-top: 15%;
+}
+
+#main-text a {
+    margin-bottom: 10px;
+}
+
+.navbar-default {
+    background-color: rgba(10, 10, 10, 0.2);
+    border-color: rgba(10, 10, 10, 0.2);
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: white;
+}
+
+.navbar-default .navbar-brand{
+    color: white;
+}
