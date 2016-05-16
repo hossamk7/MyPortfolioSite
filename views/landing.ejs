@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>My Travel Blog</title>    
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/landing.css">
 </head>
@@ -11,15 +13,24 @@
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Travel Pics</a>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
         </div>
-          <ul class="nav navbar-nav">
-            <li><a href="#">Home <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Link</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-              <li><a href="#">Log In</a></li>
-            <li><a href="#">Sign Up</a></li>
-          </ul>
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li><a href="#">Home <span class="sr-only">(current)</span></a></li>
+              <li><a href="#">Link</a></li>
+              <li><hr></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Log In</a></li>
+                <li><a href="#">Sign Up</a></li>
+            </ul>
+        </div>  
       </div><!-- /.container-fluid -->
     </nav> <!-- end of nav bar -->
     
@@ -33,7 +44,6 @@
                 <div>HK2016</div>
             </div>
         </div>
-       
     </div>
 </body>
 </html>

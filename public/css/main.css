@@ -1,0 +1,12 @@
+.navbar-default {
+    background-color: rgba(10, 10, 10, 0.3);
+    border-color: rgba(10, 10, 10, 0.1);
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: white;
+}
+
+.navbar-default .navbar-brand{
+    color: white;
+}

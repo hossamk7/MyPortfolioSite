@@ -1,5 +1,5 @@
 body{
-    background: url("https://unsplash.com/photos/Y7y7fe8hrh0");
+    background: url("https://images.unsplash.com/photo-1452215199360-c16ba37005fe?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=408c70a6e88b50949c51e26424ff64f3");
     color: white;
     background-position: center;
     background-size: cover;
@@ -23,8 +23,8 @@ h1{
 }
 
 .navbar-default {
-    background-color: rgba(10, 10, 10, 0.2);
-    border-color: rgba(10, 10, 10, 0);
+    background-color: rgba(10, 10, 10, 0.3);
+    border-style: hidden;
 }
 
 .navbar-default .navbar-nav > li > a {
