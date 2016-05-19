@@ -1,6 +1,6 @@
 .navbar-default {
     background-color: rgba(10, 10, 10, 0.3);
-    border-color: rgba(10, 10, 10, 0.1);
+    border: none;
 }
 
 .navbar-default .navbar-nav > li > a {
@@ -43,4 +43,27 @@
 
 #picture-text .pull-right{
     display: inline;
+}
+
+.dropdown-menu .form-group{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.dropdown-menu .form-group input{
+    margin-bottom: 10px;
+}
+
+.dropdown-menu .form-group label:hover{
+    color: #1fb7d2;
+}
+
+.navbar .nav > li.dropdown.open > a {
+    background-color: white;
+    border: 1px solid #a3a5a5;
+    border-bottom: none;
+}
+
+.dropdown-menu {
+    border-top: none;
 }

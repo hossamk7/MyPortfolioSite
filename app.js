@@ -16,7 +16,7 @@ app.get("/", function(req, res){
 });
 
 app.get("/home", function(req, res) {
-   res.redirect("/pictures"); 
+   res.redirect("/pictures");
 });
 
 //get all pictures from the database and send to pictures view.
