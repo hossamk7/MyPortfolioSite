@@ -2,10 +2,12 @@ var express = require("express");
 var app = express();
 var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
+var methodOverride = require("method-override");
 
 mongoose.connect("mongodb://localhost/my_travel_blog");
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: true})); 
 app.use(express.static(__dirname + "/public"));
+app.use(methodOverride("_method")); //override post in html to desired http method
 
 var Picture = require("./models/picture.js");
 
@@ -51,11 +53,34 @@ app.get("/pictures/:id", function(req, res) {
         if(err){
             console.log(err);
         } else {
-            console.log(picture);
-            console.log(req.params.id);
             res.render("show.ejs", {picture: picture});
         }
     });
+});
+
+//render edit page
+app.get("/pictures/:id/edit", function(req, res){
+    Picture.findById(req.params.id, function(err, pic){
+       if(err){
+           console.log("error " + err);
+       } else {
+           res.render("edit.ejs", {picture: pic});
+       }
+    });
+});
+
+//edit the picture
+app.put("/pictures/:id/edit", function(req, res){
+    console.log(req.params.id);  
+    Picture.findByIdAndUpdate(req.params.id, req.body.picture, function(err, picture) {
+      if(err){
+          console.log(req.body.picture);
+          console.log("error" + err);
+      } else {
+          console.log(picture);
+          res.redirect("/pictures/" + picture.id); //redirect to show the updated picture
+      }
+   }); 
 });
 
 app.get("/pictures/:id/comments/new", function(req, res) {
@@ -63,7 +88,7 @@ app.get("/pictures/:id/comments/new", function(req, res) {
    res.render("comments/new.ejs");
 });
 
-app.post("/pictures/:id/comments", function(req, res){
+app.post("/pictures/:id", function(req, res){
     //user authentication
     //validation 
     //add comments to the database and redirect to show page.

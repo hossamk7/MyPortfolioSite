@@ -1,0 +1,13 @@
+<% include partials/header.ejs %>
+
+<div id="form-container">
+    <h3>Edit Picture</h3>
+    <form class="form-group" action="/pictures/<%=picture.id%>/edit?_method=PUT" method="POST">
+        <input class="form-control" type="text" name="picture[name]" value="<%= picture.name %>">
+        <input class="form-control" type="text" name="picture[imageLink]" value="<%= picture.imageLink%>">
+        <input class="form-control" type="text" name="picture[description]" value="<%= picture.description %>">
+        <input class="btn btn-info btn-block" type="Submit">
+    </form>
+</div>
+
+<% include partials/footer.ejs %>

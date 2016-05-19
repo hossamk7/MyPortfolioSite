@@ -20,5 +20,14 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^4.0.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hossamk7/MyTravelBlog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hossamk7/MyTravelBlog/issues"
+  },
+  "homepage": "https://github.com/hossamk7/MyTravelBlog#readme"
 }
