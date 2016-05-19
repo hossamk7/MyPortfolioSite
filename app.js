@@ -32,7 +32,7 @@ app.get("/pictures", function(req, res) {
 
 //render the new picture form
 app.get("/pictures/new", function(req, res) {
-   res.render("addNewPicture.ejs"); 
+   res.render("new.ejs"); 
 });
 
 app.post("/pictures", function(req, res){
