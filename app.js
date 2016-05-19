@@ -7,7 +7,7 @@ mongoose.connect("mongodb://localhost/my_travel_blog");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
 
-var Pictures = require("./models/picture.js");
+var Picture = require("./models/picture.js");
 
 app.get("/", function(req, res){
     res.render("landing.ejs");
@@ -17,17 +17,18 @@ app.get("/home", function(req, res) {
    res.redirect("/pictures"); 
 });
 
+//get all pictures from the database and send to pictures view.
 app.get("/pictures", function(req, res) {
-   Pictures.find({}, function(err, pictures){
+   Picture.find({}, function(err, pictures){
        if(err){
            console.log(err);
        }else {
-           console.log(pictures[0].name);
            res.render("pictures.ejs", {pictures: pictures});
        }   
     });
 });
 
+//render the new picture form
 app.get("/pictures/new", function(req, res) {
    res.render("addNewPicture.ejs"); 
 });
@@ -35,7 +36,7 @@ app.get("/pictures/new", function(req, res) {
 app.post("/pictures", function(req, res){
     var newPicture = {name: req.body.name, imageLink: req.body.imageLink, description: req.body.description};
     console.log(newPicture);
-    Pictures.create(newPicture, function(err, addedPicture){
+    Picture.create(newPicture, function(err, addedPicture){
         if(err){
             console.log("error" + err);
         } else {
@@ -46,7 +47,15 @@ app.post("/pictures", function(req, res){
 });
 
 app.get("/pictures/:id", function(req, res) {
-   res.render("show.ejs");
+    Picture.findById(req.params.id, function(err, picture){
+        if(err){
+            console.log(err);
+        } else {
+            console.log(picture);
+            console.log(req.params.id);
+            res.render("show.ejs", {picture: picture});
+        }
+    });
 });
 
 app.get("/pictures/:id/comments/new", function(req, res) {

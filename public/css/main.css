@@ -10,3 +10,21 @@
 .navbar-default .navbar-brand{
     color: white;
 }
+
+.col-md-8 .img-thumbnail {
+    background-color: rgba(0, 165, 200, 0.2);
+}
+
+.pic-tabs {
+    padding-bottom: 30px;
+}
+
+#form-container {
+    width: 33%;
+    text-align: center;
+    margin-left: 33%;
+}
+
+#form-container input{
+    margin-bottom: 15px;
+}
