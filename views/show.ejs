@@ -13,9 +13,11 @@
             </div>
             <h3><%=picture.name%></h3>
             <%=picture.description%>
-        <div id="edit-buttons">
+        <div id="edit-buttons" class="text-center">
             <a href="/pictures/<%=picture.id%>/edit" class="btn btn-primary">Edit</a>
-            <a href="/picture" class="btn btn-danger">Delete</a>
+            <form action="/pictures/<%=picture.id%>?_method=DELETE" method="POST">
+                <button class="btn btn-danger">Delete</button>
+            </form>
         </div>
     </div>
         

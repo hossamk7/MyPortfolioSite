@@ -33,6 +33,10 @@
     margin-top: 10px;
 }
 
+#edit-buttons form{
+    display: inline;
+}
+
 #picture-text{
     margin: 15px;
 }

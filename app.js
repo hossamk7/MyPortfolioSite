@@ -83,15 +83,15 @@ app.put("/pictures/:id/edit", function(req, res){
    }); 
 });
 
-app.get("/pictures/:id/comments/new", function(req, res) {
-   //new comments form 
-   res.render("comments/new.ejs");
-});
-
-app.post("/pictures/:id", function(req, res){
-    //user authentication
-    //validation 
-    //add comments to the database and redirect to show page.
+//delete a picture
+app.delete("/pictures/:id", function(req, res) {
+   Picture.findByIdAndRemove(req.params.id, function(err){
+       if(err){
+           console.log("couldn't delete picture");
+       } else {
+           res.redirect("/pictures");
+       }
+   });
 });
 
 app.listen(process.env.PORT, process.env.IP, function(req, res){
