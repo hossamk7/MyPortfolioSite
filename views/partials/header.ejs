@@ -12,7 +12,7 @@
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Travel Pics</a>
+          <a class="navbar-brand" href="/">Travel Pics</a>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-collapse-1" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
@@ -22,26 +22,32 @@
         </div>
         <div class="collapse navbar-collapse" id="nav-collapse-1">
             <ul class="nav navbar-nav">
-              <li><a href="#">Home <span class="sr-only">(current)</span></a></li>
+              <li><a href="/pictures">Home <span class="sr-only">(current)</span></a></li>
               <li><a href="#">Link</a></li>
               <li><hr></li>
             </ul>
+            
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Sign Up</a></li>
+              <% if(!currentUser){%>
+                <li><a href="/signup">Sign Up</a></li>
                 <li role="presentation" class="dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Log In <span class="caret"></span></a>
                   <ul class="dropdown-menu">
                     <li>
-                        <form class="form-group">
+                        <form class="form-group" action="/login" method="POST">
                           <label for="username">Username</label>
-                          <input id="username" class="form-control" type="text">
+                          <input id="username" name="username" class="form-control" type="text">
                           <label for="password">Password</label>
-                          <input id="password" class="form-control" type="text">
+                          <input id="password" name="password" class="form-control" type="password">
                           <button class="btn btn-success center-block">Log In</button>
                         </form>
                     </li>
                   </ul>
                 </li>
+                <% } else { %>
+                <li> <a>Signed In: <%= currentUser.username %></a> </li>
+                <li><a href="/logout"> Log Out</a></li>
+                <% } %>
             </ul>
         </div>  
       </div><!-- /.container-fluid -->

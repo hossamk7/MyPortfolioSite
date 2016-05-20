@@ -3,20 +3,79 @@ var app = express();
 var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 var methodOverride = require("method-override");
+var passport = require("passport");
+var LocalStrategy = require("passport-local");
+var expressSession = require("express-session");
 
 mongoose.connect("mongodb://localhost/my_travel_blog");
 app.use(bodyParser.urlencoded({extended: true})); 
 app.use(express.static(__dirname + "/public"));
+
+var User = require("./models/user");
+var Picture = require("./models/picture.js");
+
+//PASSPORT CONFIG
+app.use(expressSession({
+    secret: "the text here is some sort of encoder and decoder",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(User.createStrategy()); //passport-local-mongoose implementation of the Local Strategy
+
+//passport-local-mongoose implementations
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use(methodOverride("_method")); //override post in html to desired http method
 
-var Picture = require("./models/picture.js");
+//set local variables for all views to have.
+app.use(function(req, res, next){
+  res.locals.currentUser = req.user;
+  next();
+});
+
+// ==========================  ROUTES BEGIN  ==============================
 
 app.get("/", function(req, res){
     res.render("landing.ejs");
 });
 
-app.get("/home", function(req, res) {
-   res.redirect("/pictures");
+//Registration page
+app.get("/signup", function(req, res) {
+   res.render("signup.ejs"); 
+});
+
+app.post("/signup", function(req, res) {
+    var newUser = new User({
+        username: req.body.username,
+        email: req.body.email
+    });
+    
+    User.register(newUser, req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+            return res.render("signup.ejs");
+        }
+        passport.authenticate("local")(req, res, function(){
+            res.redirect("/pictures");
+        });
+    });
+});
+
+app.post("/login", passport.authenticate("local", {
+        successRedirect: "/pictures",
+        failureRedirect: "back"
+    }
+    ), function(req, res){
+    });
+
+//Log Out
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/pictures");
 });
 
 //get all pictures from the database and send to pictures view.

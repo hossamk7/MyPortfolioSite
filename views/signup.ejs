@@ -1,0 +1,13 @@
+<% include partials/header.ejs %>
+
+<div id="form-container">
+    <h3>Sign Up!</h3>
+    <form class="form-group" action="/signup" method="POST">
+        <input class="form-control" type="text" name="username" placeholder="Enter Username">
+        <input class="form-control" type="text" name="password" placeholder="Enter Password">
+        <input class="form-control" type="text" name="email" placeholder="Enter Email Address">
+        <input class="btn btn-success btn-block" type="Submit">
+    </form>
+</div>
+
+<% include partials/footer.ejs %>
