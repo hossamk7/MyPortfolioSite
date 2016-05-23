@@ -4,7 +4,7 @@ var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 var methodOverride = require("method-override");
 var passport = require("passport");
-var LocalStrategy = require("passport-local");
+//var LocalStrategy = require("passport-local");
 var expressSession = require("express-session");
 
 mongoose.connect("mongodb://localhost/my_travel_blog");
@@ -13,6 +13,7 @@ app.use(express.static(__dirname + "/public"));
 
 var User = require("./models/user");
 var Picture = require("./models/picture.js");
+var Comment = require("./models/comment.js");
 
 //PASSPORT CONFIG
 app.use(expressSession({
@@ -36,6 +37,30 @@ app.use(function(req, res, next){
   res.locals.currentUser = req.user;
   next();
 });
+
+// ============= auth methods ===============
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    } 
+    res.redirect("back");
+}
+
+function checkPictureAuth(req, res, next){
+    if(req.isAuthenticated()){
+        Picture.findById(req.params.id, function(err, picture) {
+            if(err){
+                console.log("error" + err);
+                res.redirect("back");
+            } else if(picture.author.id.equals(req.user.id)){
+                return next();
+            } else {
+                res.redirect("back");
+            }
+        });
+    }
+}
 
 // ==========================  ROUTES BEGIN  ==============================
 
@@ -72,7 +97,6 @@ app.post("/login", passport.authenticate("local", {
     ), function(req, res){
     });
 
-//Log Out
 app.get("/logout", function(req, res){
     req.logout();
     res.redirect("/pictures");
@@ -90,11 +114,12 @@ app.get("/pictures", function(req, res) {
 });
 
 //render the new picture form
-app.get("/pictures/new", function(req, res) {
-   res.render("new.ejs"); 
+app.get("/pictures/new", isLoggedIn, function(req, res) {
+   res.render("new.ejs");
 });
 
-app.post("/pictures", function(req, res){
+//add new pic
+app.post("/pictures", isLoggedIn, function(req, res){
     var newPicture = {name: req.body.name, imageLink: req.body.imageLink, description: req.body.description};
     console.log(newPicture);
     Picture.create(newPicture, function(err, addedPicture){
@@ -107,8 +132,9 @@ app.post("/pictures", function(req, res){
     });
 });
 
+//show a single pic in full view
 app.get("/pictures/:id", function(req, res) {
-    Picture.findById(req.params.id, function(err, picture){
+    Picture.findById(req.params.id).populate("comments").exec(function(err, picture){
         if(err){
             console.log(err);
         } else {
@@ -151,6 +177,43 @@ app.delete("/pictures/:id", function(req, res) {
            res.redirect("/pictures");
        }
    });
+});
+
+
+// ================ COMMENTS ROUTES =======================
+
+app.post("/pictures/:id/comments", isLoggedIn, function(req, res) {
+    var author = { id: req.user.id, username: req.user.username };
+    var newComment = { text: req.body.text, author: author };
+    
+    Picture.findById(req.params.id, function(err, picture) {
+        if(err){
+            
+        } 
+        else {
+            Comment.create(newComment, function(err, addedComment){
+                if(err){
+                    console.log(err);
+                } else {
+                    picture.comments.push(addedComment);
+                    picture.save();
+                    console.log(addedComment);
+                    res.redirect("/pictures/" + req.params.id);
+                }
+            });
+        }
+    });
+});
+
+app.delete("/pictures/:id/comments/:commentId", function(req, res) {
+    Comment.findByIdAndRemove(req.params.commentId, function(err){
+        console.log(req.params.commentId);
+        if(err){
+            console.log("delete error" + err);
+        } else {
+            res.redirect("/pictures/" + req.params.id);
+        }
+    });
 });
 
 app.listen(process.env.PORT, process.env.IP, function(req, res){

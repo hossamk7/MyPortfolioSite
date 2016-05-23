@@ -11,10 +11,6 @@
     color: white;
 }
 
-.col-md-8 .img-thumbnail {
-    background-color: rgba(0, 165, 200, 0.2);
-}
-
 .pic-tabs {
     padding-bottom: 30px;
 }
@@ -45,6 +41,10 @@
     display: inline;
 }
 
+#delete-comment-button{
+    margin-left: 3px;
+}
+
 .dropdown-menu .form-group{
     padding-left: 10px;
     padding-right: 10px;
@@ -66,4 +66,17 @@
 
 .dropdown-menu {
     border-top: none;
+}
+
+textarea {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.well .form-control {
+    margin-bottom: 5px;
+}
+
+.hidden{
+    display: none;
 }
