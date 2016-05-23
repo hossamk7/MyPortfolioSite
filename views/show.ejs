@@ -28,7 +28,7 @@
         <div class="collapse" id="collapseExample">
             <form action="/pictures/<%=picture.id%>/comments" method="POST">
                 <textarea class="form-control" name="text"></textarea>
-                <button class="btn btn-primary">Submit</button>
+                <button class="btn btn-info">Submit</button>
             </form>
         </div>
         <% for(var i = 0; i < picture.comments.length; i++) { %>
@@ -45,7 +45,7 @@
                 <div class="hidden" id="edit-form"> <!-- possibly change from bootstrap toggle to manual as needed to hide comment below -->
                     <form>
                         <textarea class="form-control"><%=picture.comments[i].text%></textarea>
-                        <button>Submit</button>
+                        <button class="btn btn-info btn-sm">Submit</button>
                     </form>
                 </div>
                 <div id="comment-text">
