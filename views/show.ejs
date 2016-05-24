@@ -16,7 +16,7 @@
             <div id="edit-buttons" class="text-center">
                 <a href="/pictures/<%=picture.id%>/edit" class="btn btn-primary">Edit</a>
                 <form action="/pictures/<%=picture.id%>?_method=DELETE" method="POST">
-                    <button class="btn btn-danger">Delete</button>
+                    <button class="btn btn-danger delete-button">Delete</button>
                 </form>
             </div>
         </div>
@@ -36,7 +36,7 @@
         <hr>
         <div class="comment">
             <strong><%=picture.comments[i].author.username%></strong>
-            <form class="pull-right delete-comment-button" action="/pictures/<%=picture.id%>/comments/<%=picture.comments[i].id%>?_method=DELETE" method="POST">
+            <form class="pull-right delete-button" action="/pictures/<%=picture.id%>/comments/<%=picture.comments[i].id%>?_method=DELETE" method="POST">
                 <button class="btn btn-danger btn-xs">Delete</button>
             </form>
             

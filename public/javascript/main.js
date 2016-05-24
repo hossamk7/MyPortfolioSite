@@ -4,10 +4,10 @@ $(document).ready(function(){
         $(this).parent().children("div").toggleClass("hidden");
     });
     
-    $(".delete-comment-button").click(function(event){
-        var confirmDel = confirm("Delete comment? Click OK to continue.");
+    $(".delete-button").click(function(event){
+        var confirmDel = confirm("Are you sure you want to delete this? Click OK to continue.");
         if(confirmDel){
-            $('.delete-comment-button').submit();
+            $('.delete-button').submit();
         } else {
             event.preventDefault();  
         }
