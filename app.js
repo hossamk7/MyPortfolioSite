@@ -65,6 +65,23 @@ function checkPictureAuth(req, res, next){
     }
 }
 
+function checkCommentAuth(req, res, next){
+    if(req.isAuthenticated()){
+        Comment.findById(req.params.commentId, function(err, comment) {
+            if(err){
+                console.log("error" + err);
+                res.redirect("back");
+            } else if(comment.author.id.equals(req.user.id)){
+                return next();
+            } else {
+                res.redirect("back");
+            }
+        });
+    } else {
+        res.redirect("back");
+    }
+}
+
 // ==========================  ROUTES BEGIN  ==============================
 
 app.get("/", function(req, res){
@@ -206,18 +223,26 @@ app.post("/pictures/:id/comments", isLoggedIn, function(req, res) {
     });
 });
 
-app.delete("/pictures/:id/comments/:commentId", function(req, res) {
-    Comment.findByIdAndRemove(req.params.commentId, function(err){
-        console.log(req.params.commentId);
+app.delete("/pictures/:id/comments/:commentId", checkCommentAuth, function(req, res) {
+    
+    Picture.findById(req.params.id, function(err, picture) {
         if(err){
-            console.log("delete error" + err);
-        } else {
-            res.redirect("/pictures/" + req.params.id);
+            
         }
+        Comment.findByIdAndRemove(req.params.commentId, function(err){
+            console.log("deleted comment: " + req.params.commentId);
+            if(err){
+                console.log("delete error" + err);
+            } else {
+                picture.comments.pull({_id: req.params.commentId});
+                picture.save();
+                res.redirect("/pictures/" + req.params.id);
+            }
+        });
     });
 });
 
-app.put("/pictures/:id/comments/:commentId", function(req, res){
+app.put("/pictures/:id/comments/:commentId", checkCommentAuth, function(req, res){
     var comment = {text: req.body.commentText, author: {id: req.user.id, username: req.user.username} };
     Comment.findByIdAndUpdate(req.params.commentId, comment, function(err, editedComment){
        if(err){
@@ -226,7 +251,7 @@ app.put("/pictures/:id/comments/:commentId", function(req, res){
            console.log(editedComment);
            res.redirect("/pictures/" + req.params.id);
        }
-   });
+    });
 });
 
 app.listen(process.env.PORT, process.env.IP, function(req, res){
