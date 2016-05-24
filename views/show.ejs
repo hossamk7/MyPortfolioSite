@@ -32,27 +32,28 @@
             </form>
         </div>
         <% for(var i = 0; i < picture.comments.length; i++) { %>
-        <div>
-            <hr>
-            <div>
-                <strong><%=picture.comments[i].author.username%></strong>
-                <form class="pull-right" id="delete-comment-button" action="/pictures/<%=picture.id%>/comments/<%=picture.comments[i].id%>?_method=DELETE" method="POST">
-                    <button class="btn btn-danger btn-xs">Delete</button>
-                </form>
-                <button class="btn btn-xs btn-primary pull-right" id="edit-button">Edit</button>
-            </div>
+       
+        <hr>
+        <div class="comment">
+            <strong><%=picture.comments[i].author.username%></strong>
+            <form class="pull-right delete-comment-button" action="/pictures/<%=picture.id%>/comments/<%=picture.comments[i].id%>?_method=DELETE" method="POST">
+                <button class="btn btn-danger btn-xs">Delete</button>
+            </form>
             
-                <div class="hidden" id="edit-form"> <!-- possibly change from bootstrap toggle to manual as needed to hide comment below -->
-                    <form>
-                        <textarea class="form-control"><%=picture.comments[i].text%></textarea>
+            <span>
+                <button class="btn btn-xs btn-primary pull-right edit-comment-button">Edit</button>
+                <div class="hidden edit-textbox">
+                    <form action="/pictures/<%=picture.id%>/comments/<%=picture.comments[i].id%>?_method=PUT" method="POST">
+                        <textarea class="form-control" name="commentText"><%=picture.comments[i].text%></textarea>
                         <button class="btn btn-info btn-sm">Submit</button>
                     </form>
                 </div>
-                <div id="comment-text">
+                <div class="comment-text">
                     <%=picture.comments[i].text%>
                 </div>
-                 <!-- need to write a js method to toggle this display on/off when edit button is clicked -->
+            </span>
         </div>
+       
         <% } %>
     </div>
 </div>

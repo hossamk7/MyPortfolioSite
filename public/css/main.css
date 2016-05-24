@@ -41,7 +41,7 @@
     display: inline;
 }
 
-#delete-comment-button{
+.delete-comment-button{
     margin-left: 3px;
 }
 

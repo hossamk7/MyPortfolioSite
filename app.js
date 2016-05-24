@@ -50,6 +50,7 @@ function isLoggedIn(req, res, next){
 function checkPictureAuth(req, res, next){
     if(req.isAuthenticated()){
         Picture.findById(req.params.id, function(err, picture) {
+            console.log(picture);
             if(err){
                 console.log("error" + err);
                 res.redirect("back");
@@ -59,6 +60,8 @@ function checkPictureAuth(req, res, next){
                 res.redirect("back");
             }
         });
+    } else {
+        res.redirect("back");
     }
 }
 
@@ -95,7 +98,7 @@ app.post("/login", passport.authenticate("local", {
         failureRedirect: "back"
     }
     ), function(req, res){
-    });
+});
 
 app.get("/logout", function(req, res){
     req.logout();
@@ -120,7 +123,7 @@ app.get("/pictures/new", isLoggedIn, function(req, res) {
 
 //add new pic
 app.post("/pictures", isLoggedIn, function(req, res){
-    var newPicture = {name: req.body.name, imageLink: req.body.imageLink, description: req.body.description};
+    var newPicture = { name: req.body.name, imageLink: req.body.imageLink, description: req.body.description, author: {id: req.user.id, username: req.user.username} };
     console.log(newPicture);
     Picture.create(newPicture, function(err, addedPicture){
         if(err){
@@ -144,7 +147,7 @@ app.get("/pictures/:id", function(req, res) {
 });
 
 //render edit page
-app.get("/pictures/:id/edit", function(req, res){
+app.get("/pictures/:id/edit", checkPictureAuth, function(req, res){
     Picture.findById(req.params.id, function(err, pic){
        if(err){
            console.log("error " + err);
@@ -155,21 +158,19 @@ app.get("/pictures/:id/edit", function(req, res){
 });
 
 //edit the picture
-app.put("/pictures/:id/edit", function(req, res){
+app.put("/pictures/:id/edit", checkPictureAuth, function(req, res){
     console.log(req.params.id);  
     Picture.findByIdAndUpdate(req.params.id, req.body.picture, function(err, picture) {
       if(err){
-          console.log(req.body.picture);
           console.log("error" + err);
       } else {
-          console.log(picture);
           res.redirect("/pictures/" + picture.id); //redirect to show the updated picture
       }
    }); 
 });
 
 //delete a picture
-app.delete("/pictures/:id", function(req, res) {
+app.delete("/pictures/:id", checkPictureAuth, function(req, res) {
    Picture.findByIdAndRemove(req.params.id, function(err){
        if(err){
            console.log("couldn't delete picture");
@@ -214,6 +215,18 @@ app.delete("/pictures/:id/comments/:commentId", function(req, res) {
             res.redirect("/pictures/" + req.params.id);
         }
     });
+});
+
+app.put("/pictures/:id/comments/:commentId", function(req, res){
+    var comment = {text: req.body.commentText, author: {id: req.user.id, username: req.user.username} };
+    Comment.findByIdAndUpdate(req.params.commentId, comment, function(err, editedComment){
+       if(err){
+           console.log("err");
+       } else {
+           console.log(editedComment);
+           res.redirect("/pictures/" + req.params.id);
+       }
+   });
 });
 
 app.listen(process.env.PORT, process.env.IP, function(req, res){

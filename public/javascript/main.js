@@ -1,14 +1,13 @@
 $(document).ready(function(){
     
-    $("#edit-button").on("click", function(){
-	    $("#edit-form").toggleClass("hidden");
-	    $("#comment-text").toggleClass("hidden");
+    $(".edit-comment-button").on("click", function(){
+        $(this).parent().children("div").toggleClass("hidden");
     });
     
-    $("#delete-comment-button").click(function(event){
+    $(".delete-comment-button").click(function(event){
         var confirmDel = confirm("Delete comment? Click OK to continue.");
         if(confirmDel){
-            $('delete-comment-button').submit();
+            $('.delete-comment-button').submit();
         } else {
             event.preventDefault();  
         }
