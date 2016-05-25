@@ -13,4 +13,17 @@ $(document).ready(function(){
         }
     });
     
+    $("#add-comment").on("click", function(event) {
+        alert("Please log in to add comments");
+    });
+    
+    
+    $("#signup").on("submit", function(event) {
+        if($("#signup input:nth-of-type(2)").val() === $("#signup input:nth-of-type(3)").val()){
+            $(this).submit();
+        } else {
+            alert("Password fields do not match, please re-enter.");
+            event.preventDefault();
+        } 
+    });
 });

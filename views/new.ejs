@@ -3,9 +3,9 @@
 <div id="form-container">
     <h3>Add New Picture</h3>
     <form class="form-group" action="/pictures" method="POST">
-        <input class="form-control" type="text" name="name" placeholder="Enter title">
-        <input class="form-control" type="text" name="imageLink" placeholder="Enter Image URL">
-        <input class="form-control" type="text" name="description" placeholder="Enter Description">
+        <input class="form-control" type="text" name="name" placeholder="Enter Title" maxlength="25" required>
+        <input class="form-control" type="url" name="imageLink" placeholder="Enter Image URL" required>
+        <textarea class="form-control" name="description" placeholder="Enter a description"></textarea>
         <input class="btn btn-info btn-block" type="Submit">
     </form>
 </div>

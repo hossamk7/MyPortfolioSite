@@ -1,11 +1,12 @@
 <% include partials/header.ejs %>
 
-<div id="form-container">
+<div id="form-container" class="well">
     <h3>Sign Up!</h3>
-    <form class="form-group" action="/signup" method="POST">
-        <input class="form-control" type="text" name="username" placeholder="Enter Username">
-        <input class="form-control" type="text" name="password" placeholder="Enter Password">
-        <input class="form-control" type="text" name="email" placeholder="Enter Email Address">
+    <form id="signup" class="form-group" action="/signup" method="POST">
+        <input class="form-control" type="text" name="username" placeholder="Enter Username" minlength="3" maxlength="20" pattern="[a-zA-Z0-9]+" required>
+        <input class="form-control" type="password" name="password" placeholder="Enter Password" minlength="5" maxlength="20" required>
+        <input class="form-control" type="password" placeholder="Re-enter Password" minlength="5" maxlength="20" required>
+        <input class="form-control" type="email" name="email" placeholder="Enter Email Address" required>
         <input class="btn btn-success btn-block" type="Submit">
     </form>
 </div>
