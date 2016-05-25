@@ -4,8 +4,8 @@ var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 var methodOverride = require("method-override");
 var passport = require("passport");
-//var LocalStrategy = require("passport-local");
 var expressSession = require("express-session");
+var connectFlash = require("connect-flash");
 
 mongoose.connect("mongodb://localhost/my_travel_blog");
 app.use(bodyParser.urlencoded({extended: true})); 
@@ -31,10 +31,13 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use(methodOverride("_method")); //override post in html to desired http method
+app.use(connectFlash());
 
 //set local variables for all views to have.
 app.use(function(req, res, next){
   res.locals.currentUser = req.user;
+  res.locals.flashRedMessage = req.flash("flashRedMessage");
+  res.locals.flashGreenMessage = req.flash("flashGreenMessage");
   next();
 });
 
@@ -43,7 +46,8 @@ app.use(function(req, res, next){
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
         return next();
-    } 
+    }
+    req.flash("flashRedMessage", "You must be logged in to perform this action.");
     res.redirect("back");
 }
 
@@ -52,15 +56,17 @@ function checkPictureAuth(req, res, next){
         Picture.findById(req.params.id, function(err, picture) {
             console.log(picture);
             if(err){
-                console.log("error" + err);
+                req.flash("flashRedMessage", "Unable to find picture");
                 res.redirect("back");
             } else if(picture.author.id.equals(req.user.id)){
                 return next();
             } else {
+                req.flash("flashRedMessage", "You do not have permission to perform this action.");
                 res.redirect("back");
             }
         });
     } else {
+        req.flash("flashRedMessage", "You must be logged in to perform this action.");
         res.redirect("back");
     }
 }
@@ -69,15 +75,17 @@ function checkCommentAuth(req, res, next){
     if(req.isAuthenticated()){
         Comment.findById(req.params.commentId, function(err, comment) {
             if(err){
-                console.log("error" + err);
+                req.flash("flashRedMessage", "Unable to find comment");
                 res.redirect("back");
             } else if(comment.author.id.equals(req.user.id)){
                 return next();
             } else {
+                req.flash("flashRedMessage", "You do not have permission to perform this action.");
                 res.redirect("back");
             }
         });
     } else {
+        req.flash("flashRedMessage", "You must be logged in to perform this action.");
         res.redirect("back");
     }
 }
@@ -102,20 +110,35 @@ app.post("/signup", function(req, res) {
     User.register(newUser, req.body.password, function(err, user){
         if(err){
             console.log(err);
-            return res.render("signup.ejs");
+            return res.render("signup.ejs", {flashRedMessage: err.message });
         }
         passport.authenticate("local")(req, res, function(){
+            req.flash("flashGreenMessage", "Hello " + user.username);
             res.redirect("/pictures");
         });
     });
 });
 
-app.post("/login", passport.authenticate("local", {
-        successRedirect: "/pictures",
-        failureRedirect: "back"
-    }
-    ), function(req, res){
+app.post('/login', function(req, res, next){
+    passport.authenticate("local", function(err, user, info){
+        if(err){
+            return next(err);
+        }
+        if (user === false){
+            console.log(info);
+            req.flash("flashRedMessage", info.message);
+            return res.redirect("back");
+        }
+        req.login(user, function(err){
+            if(err){
+                return next(err);
+            }
+            req.flash("flashGreenMessage", "Welcome back " + user.username + "!");
+            return res.redirect("/pictures");        
+        });      
+    })(req, res);
 });
+
 
 app.get("/logout", function(req, res){
     req.logout();

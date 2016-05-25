@@ -1,6 +1,6 @@
 <% include partials/header.ejs %>
 
-<div id="form-container">
+<div id="form-container" class="well">
     <h3>Edit Picture</h3>
     <form class="form-group" action="/pictures/<%=picture.id%>/edit?_method=PUT" method="POST">
         <input class="form-control" type="text" name="picture[name]" value="<%= picture.name %>" maxlength="25" required>

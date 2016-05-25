@@ -25,7 +25,7 @@
     </div>
     <div class="well">
         <button class="btn btn-default" <% if(!currentUser) { %>id="add-comment" <% } else { %> data-toggle="collapse" <% } %> data-target="#collapseExample" type="button" aria-expanded="false" aria-controls="collapseExample">
-            Add Comment
+            Add Comment <span class="caret" aria-hidden="true"></span>
         </button>
         <div class="collapse" id="collapseExample">
             <form action="/pictures/<%=picture.id%>/comments" method="POST">

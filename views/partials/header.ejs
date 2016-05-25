@@ -53,5 +53,19 @@
       </div><!-- /.container-fluid -->
     </nav> <!-- end of nav bar -->
     
+    <div class="container">
+      <% if(flashRedMessage.length > 0){ %>
+        <div class="alert alert-danger">
+            <%= flashRedMessage %>
+        </div>
+      <% } %>
+      <% if(flashGreenMessage.length > 0){ %>
+        <div class="alert alert-success">   
+          <%= flashGreenMessage %>
+        </div>
+      <% } %>
+    </div>
+    
+    
     <div class="container-fluid">
         <div class="container">
