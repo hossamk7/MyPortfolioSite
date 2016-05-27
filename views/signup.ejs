@@ -1,14 +1,17 @@
 <% include partials/header.ejs %>
 
-<div id="form-container" class="well">
-    <h3>Sign Up!</h3>
-    <form id="signup" class="form-group" action="/signup" method="POST">
-        <input class="form-control" type="text" name="username" placeholder="Enter Username" minlength="3" maxlength="20" pattern="(?=.*[a-zA-Z])[a-zA-Z0-9]+" title="Must contain at least one letter, only letters and numbers permitted" required>
-        <input class="form-control" type="password" name="password" placeholder="Enter Password" minlength="5" maxlength="20" required>
-        <input class="form-control" type="password" placeholder="Re-enter Password" minlength="5" maxlength="20" required>
-        <input class="form-control" type="email" name="email" placeholder="Enter Email Address" required>
-        <input class="btn btn-success btn-block" type="Submit">
-    </form>
+<div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1">
+    <div class="well form-container">
+        <h3>Sign Up!</h3>
+        <form id="signup" class="form-group" action="/signup" method="POST">
+            <input class="form-control" type="text" name="username" placeholder="Enter Username" minlength="3" maxlength="20" pattern="(?=.*[a-zA-Z])[a-zA-Z0-9]+" title="Must contain at least one letter, only letters and numbers permitted" required>
+            <input class="form-control" type="password" name="password" placeholder="Enter Password" minlength="5" maxlength="20" required>
+            <input class="form-control" type="password" placeholder="Re-enter Password" minlength="5" maxlength="20" required>
+            <input class="form-control" type="email" name="email" placeholder="Enter Email Address" required>
+            <input class="btn btn-success btn-block" type="Submit">
+        </form>
+    </div>    
 </div>
+
 
 <% include partials/footer.ejs %>

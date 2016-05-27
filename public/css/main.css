@@ -15,10 +15,8 @@
     padding-bottom: 30px;
 }
 
-#form-container {
-    width: 33%;
+.form-container {
     text-align: center;
-    margin-left: 33%;
     padding-top: 0;
 }
 
@@ -69,7 +67,7 @@
     border-top: none;
 }
 
-.comment textarea {
+textarea {
     width: 100%;
     margin-top: 15px;
 }
