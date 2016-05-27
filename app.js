@@ -244,10 +244,15 @@ app.put("/pictures/:id/edit", checkPictureAuth, function(req, res){
 
 //delete a picture
 app.delete("/pictures/:id", checkPictureAuth, function(req, res) {
-   Picture.findByIdAndRemove(req.params.id, function(err){
+   Picture.findByIdAndRemove(req.params.id, function(err, picture){
        if(err){
            console.log("couldn't delete picture");
        } else {
+            fs.unlink("public" + picture.imageLink, function(err){
+                if(err){
+                    console.log("err");
+                }
+            });
             req.flash("flashGreenMessage", "Picture deleted");
             res.redirect("/pictures");
        }
