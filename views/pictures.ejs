@@ -3,22 +3,21 @@
     <div class="pic-tabs">
         <ul class="nav nav-tabs">
             <li role="presentation" class="active"><a href='#'>Most Recent</a></li>
-            <li role="presentation"><a href='#'>Most Comments</a></li>
             <li role="presentation"><a href='#'>Randoms</a></li>
             <li role="presentation"><a href='#'>Show All</a></li>
-        </ul>   
+            <a class="btn btn-large btn-primary pull-right" href="/pictures/new">Add New Picture</a>
+        </ul>  
     </div>
     
     <div class="jumbotron">
         <h2>Pictures</h2>
     </div>
     
-    
-    <div class="row">
+    <div class="row" id="show-multi">
         <% for(var i = 0; i < pictures.length; i++) { %>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-md-3 col-sm-6 img-responsive">
             <div class="thumbnail text-center">
-                <%= pictures[i].name%>
+                <strong><%= pictures[i].name%></strong>
                 <img src="<%=pictures[i].imageLink%>">
                 <%= pictures[i].description %>
                 <a class="btn btn-info btn-block" href="/pictures/<%=pictures[i]._id%>"> More Info </a>

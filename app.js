@@ -6,10 +6,15 @@ var methodOverride = require("method-override");
 var passport = require("passport");
 var expressSession = require("express-session");
 var connectFlash = require("connect-flash");
+var path = require("path");
+var fs = require("fs");
 
 mongoose.connect("mongodb://localhost/my_travel_blog");
 app.use(bodyParser.urlencoded({extended: true})); 
+
 app.use(express.static(__dirname + "/public"));
+var multer = require("multer");
+var upload = multer({ dest: 'uploads/', fileFilter: fileFilter, limits: {fileSize: 5000000} });
 
 var User = require("./models/user");
 var Picture = require("./models/picture.js");
@@ -90,13 +95,30 @@ function checkCommentAuth(req, res, next){
     }
 }
 
+function fileFilter (req, file, cb) {
+  // The function should call `cb` with a boolean 
+  // to indicate if the file should be accepted 
+  switch (file.mimetype) {
+      case 'image/jpeg':
+          cb(null, true);
+          break;
+      case 'image/png':
+          cb(null, true);
+          break;
+      case 'image/gif':
+          cb(null, true);
+          break;
+      default:
+          cb(null, false);
+  }
+}
+
 // ==========================  ROUTES BEGIN  ==============================
 
 app.get("/", function(req, res){
     res.render("landing.ejs");
 });
 
-//Registration page
 app.get("/signup", function(req, res) {
    res.render("signup.ejs"); 
 });
@@ -142,6 +164,7 @@ app.post('/login', function(req, res, next){
 
 app.get("/logout", function(req, res){
     req.logout();
+    req.flash("flashGreenMessage", "You have been logged out.");
     res.redirect("/pictures");
 });
 
@@ -161,18 +184,27 @@ app.get("/pictures/new", isLoggedIn, function(req, res) {
    res.render("new.ejs");
 });
 
+
 //add new pic
-app.post("/pictures", isLoggedIn, function(req, res){
-    var newPicture = { name: req.body.name, imageLink: req.body.imageLink, description: req.body.description, author: {id: req.user.id, username: req.user.username} };
-    console.log(newPicture);
-    Picture.create(newPicture, function(err, addedPicture){
-        if(err){
-            console.log("error" + err);
-        } else {
-            console.log(addedPicture);
-            res.redirect("/pictures");
-        }
-    });
+app.post("/pictures", isLoggedIn, upload.single('upload'), function(req, res){
+    if(req.file){
+        var fileExt = path.extname(req.file.originalname);
+        var fileName = req.file.filename + fileExt;
+        fs.renameSync(req.file.path, "public/images/" + fileName);
+        var imageLink = "/images/" + fileName;
+        var newPicture = { name: req.body.name, imageLink: imageLink, description: req.body.description, author: {id: req.user.id, username: req.user.username} };
+        console.log(newPicture);
+        Picture.create(newPicture, function(err, addedPicture){
+            if(err){
+                console.log("error" + err);
+            } else {
+                res.redirect("/pictures");
+            }
+        });
+    } else {
+        req.flash("flashRedMessage", "Upload Failed: Files must be images of type (.jpg / .png / .gif) and no larger than 5mb.");
+        res.redirect("/pictures/new");
+    }
 });
 
 //show a single pic in full view
@@ -204,6 +236,7 @@ app.put("/pictures/:id/edit", checkPictureAuth, function(req, res){
       if(err){
           console.log("error" + err);
       } else {
+          req.flash("flashGreenMessage", "Successfully edited " + picture.name);
           res.redirect("/pictures/" + picture.id); //redirect to show the updated picture
       }
    }); 
@@ -215,7 +248,8 @@ app.delete("/pictures/:id", checkPictureAuth, function(req, res) {
        if(err){
            console.log("couldn't delete picture");
        } else {
-           res.redirect("/pictures");
+            req.flash("flashGreenMessage", "Picture deleted");
+            res.redirect("/pictures");
        }
    });
 });
@@ -275,6 +309,10 @@ app.put("/pictures/:id/comments/:commentId", checkCommentAuth, function(req, res
            res.redirect("/pictures/" + req.params.id);
        }
     });
+});
+
+app.get("/*", function(req, res) {
+   res.redirect("back"); 
 });
 
 app.listen(process.env.PORT, process.env.IP, function(req, res){

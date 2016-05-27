@@ -5,11 +5,12 @@
 </div>
 
 <div class="col-md-8">
-    <div class="img-thumbnail">
-        <img class="img-responsive" src="<%=picture.imageLink%>">
+    <div class="thumbnail">
+        <img class="img-fluid" src="<%=picture.imageLink%>">
         <div id="picture-text">
             <div class="pull-right">
-                <em>Added by</em> hossamk
+                <span><em>Added by</em> <a href="#"><%=picture.author.username%></a> </span>
+                <div><%=picture.created.toDateString()%></div>
             </div>
             <h3><%=picture.name%></h3>
             <%=picture.description%>
@@ -37,7 +38,7 @@
        
         <hr>
         <div class="comment">
-            <strong><%=picture.comments[i].author.username%></strong>
+            <strong><a href="#"><%=picture.comments[i].author.username %></a></strong>
             <span>
                 <% if(currentUser && picture.comments[i].author.id.equals(currentUser.id)) { %>
                 <form class="pull-right delete-button" action="/pictures/<%=picture.id%>/comments/<%=picture.comments[i].id%>?_method=DELETE" method="POST">
@@ -54,9 +55,13 @@
                 <div class="comment-text">
                     <%=picture.comments[i].text%>
                 </div>
+                <div class="date-time"> 
+                    <%= picture.comments[i].created.toLocaleString('en-gb', {day: 'numeric', month: 'numeric', year: '2-digit'}) %>
+                    <span>at</span>
+                    <%= picture.comments[i].created.getHours() + ":" + picture.comments[i].created.getMinutes() %> 
+                </div>
             </span>
         </div>
-       
         <% } %>
     </div>
 </div>
