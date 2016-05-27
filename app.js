@@ -259,6 +259,16 @@ app.delete("/pictures/:id", checkPictureAuth, function(req, res) {
    });
 });
 
+app.get("/pictures/find/mypictures", isLoggedIn, function(req, res) {
+    Picture.find({"author.username": req.user.username}, function(err, pictures) {
+        if(err){
+            console.log("err" + err);
+        } else {
+            res.render("pictures.ejs", {pictures: pictures});
+        }
+    });
+});
+
 
 // ================ COMMENTS ROUTES =======================
 
