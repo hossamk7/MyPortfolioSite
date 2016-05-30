@@ -43,6 +43,7 @@ app.use(function(req, res, next){
   res.locals.currentUser = req.user;
   res.locals.flashRedMessage = req.flash("flashRedMessage");
   res.locals.flashGreenMessage = req.flash("flashGreenMessage");
+  res.locals.all = undefined;
   next();
 });
 
@@ -115,7 +116,7 @@ function fileFilter (req, file, cb) {
 
 // ==========================  ROUTES BEGIN  ==============================
 
-app.get("/", function(req, res){
+app.get("/pictures", function(req, res){
     res.render("landing.ejs");
 });
 
@@ -135,7 +136,7 @@ app.post("/signup", function(req, res) {
         }
         passport.authenticate("local")(req, res, function(){
             req.flash("flashGreenMessage", "Hello " + user.username);
-            res.redirect("/pictures");
+            res.redirect("/pictures/recent");
         });
     });
 });
@@ -155,7 +156,7 @@ app.post('/login', function(req, res, next){
                 return next(err);
             }
             req.flash("flashGreenMessage", "Welcome back " + user.username + "!");
-            return res.redirect("/pictures");        
+            return res.redirect("/pictures/recent");        
         });      
     })(req, res);
 });
@@ -164,17 +165,29 @@ app.post('/login', function(req, res, next){
 app.get("/logout", function(req, res){
     req.logout();
     req.flash("flashGreenMessage", "You have been logged out.");
-    res.redirect("/pictures");
+    res.redirect("/pictures/recent");
 });
 
 //get all pictures from the database and send to pictures view.
-app.get("/pictures", function(req, res) {
+app.get("/pictures/all", function(req, res) {
    Picture.find({}, function(err, pictures){
        if(err){
            console.log(err);
        }else {
-           res.render("pictures.ejs", {pictures: pictures});
+           res.render("pictures.ejs", {pictures: pictures, all: true});
        }   
+    });
+});
+
+app.get("/pictures/recent", function(req, res) {
+    Picture.find().sort({"created": -1}).limit(8).exec(function(err, pictures){
+        if(err){
+            req.flash("flashRedMessage", "Unable to get pictures");
+            res.redirect("/pictures/recent");
+            console.log(err);
+        } else {
+            res.render("pictures.ejs", {pictures: pictures, all: false});
+        }
     });
 });
 
@@ -197,7 +210,7 @@ app.post("/pictures", isLoggedIn, upload.single('upload'), function(req, res){
             if(err){
                 console.log("error" + err);
             } else {
-                res.redirect("/pictures");
+                res.redirect("/pictures/recent");
             }
         });
     } else {
@@ -269,7 +282,7 @@ app.delete("/pictures/:id", checkPictureAuth, function(req, res) {
                 }
             });
             req.flash("flashGreenMessage", "Picture deleted");
-            res.redirect("/pictures");
+            res.redirect("/pictures/recent");
        }
    });
 });
@@ -279,10 +292,12 @@ app.get("/pictures/find/:username", function(req, res) {
         if(err){
             console.log("err" + err);
         } else {
-            res.render("pictures.ejs", {pictures: pictures});
+            res.render("pictures.ejs", {pictures: pictures, flashGreenMessage: "Showing pictures added by " + req.params.username});
         }
     });
 });
+
+
 
 // ================ COMMENTS ROUTES =======================
 

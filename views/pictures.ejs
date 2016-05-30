@@ -2,8 +2,8 @@
 
     <div class="pic-tabs">
         <ul class="nav nav-tabs">
-            <li role="presentation"><a href='#'>Most Recent</a></li>
-            <li role="presentation"><a href='#'>Show All</a></li>
+            <li role="presentation" <% if(!all){ %> class="active" <% } %> ><a href='/pictures/recent'>Recently Added</a></li>
+            <li role="presentation" <% if(all){%> class="active" <% } %> ><a href='/pictures/all'>Show All</a></li>
             <li role="presentation"><a href='/pictures/random'>Random Picture</a></li>
             <a class="btn btn-primary pull-right" href="/pictures/new">Add New Picture</a>
         </ul>  
@@ -19,7 +19,6 @@
             <div class="thumbnail text-center">
                 <strong><%= pictures[i].name%></strong>
                 <img src="<%=pictures[i].imageLink%>">
-                <%= pictures[i].description %>
                 <a class="btn btn-info btn-block" href="/pictures/<%=pictures[i]._id%>"> More Info </a>
             </div>
         </div>
