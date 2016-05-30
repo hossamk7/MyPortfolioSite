@@ -6,16 +6,15 @@ var methodOverride = require("method-override");
 var passport = require("passport");
 var expressSession = require("express-session");
 var connectFlash = require("connect-flash");
+var User = require("./models/user");
+
+var pictureRoutes = require("./routes/pictures");
+var indexRoutes = require("./routes/index");
+var commentRoutes = require("./routes/comments");
 
 mongoose.connect("mongodb://localhost/my_travel_blog");
 app.use(bodyParser.urlencoded({extended: true})); 
-
 app.use(express.static(__dirname + "/public"));
-var authMiddleware = require("./middleware/authMiddleware");
-
-var User = require("./models/user");
-var Picture = require("./models/picture");
-var Comment = require("./models/comment");
 
 //PASSPORT CONFIG
 app.use(expressSession({
@@ -44,68 +43,9 @@ app.use(function(req, res, next){
   next();
 });
 
-var pictureRoutes = require("./routes/pictures");
-app.use(pictureRoutes);
-var indexRoutes = require("./routes/index");
 app.use(indexRoutes);
-
-
-// ================ COMMENTS ROUTES =======================
-
-app.post("/pictures/:id/comments", authMiddleware.isLoggedIn, function(req, res) {
-    var author = { id: req.user.id, username: req.user.username };
-    var newComment = { text: req.body.text, author: author };
-    
-    Picture.findById(req.params.id, function(err, picture) {
-        if(err){
-            req.flash("flashRedMessage", "failed to add comment");
-            res.redirect("back");
-        } 
-        else {
-            Comment.create(newComment, function(err, addedComment){
-                if(err){
-                    console.log(err);
-                } else {
-                    picture.comments.push(addedComment);
-                    picture.save();
-                    console.log(addedComment);
-                    res.redirect("/pictures/" + req.params.id);
-                }
-            });
-        }
-    });
-});
-
-app.delete("/pictures/:id/comments/:commentId", authMiddleware.checkCommentAuth, function(req, res) {
-    Picture.findById(req.params.id, function(err, picture) {
-        if(err){
-            req.flash("flashRedMessage", "failed to delete comment");
-            res.redirect("back");
-        }
-        Comment.findByIdAndRemove(req.params.commentId, function(err){
-            console.log("deleted comment: " + req.params.commentId);
-            if(err){
-                console.log("delete error" + err);
-            } else {
-                picture.comments.pull({_id: req.params.commentId});
-                picture.save();
-                res.redirect("/pictures/" + req.params.id);
-            }
-        });
-    });
-});
-
-app.put("/pictures/:id/comments/:commentId", authMiddleware.checkCommentAuth, function(req, res){
-    var comment = {text: req.body.commentText, author: {id: req.user.id, username: req.user.username} };
-    Comment.findByIdAndUpdate(req.params.commentId, comment, function(err, editedComment){
-       if(err){
-           console.log("err");
-       } else {
-           console.log(editedComment);
-           res.redirect("/pictures/" + req.params.id);
-       }
-    });
-});
+app.use(pictureRoutes);
+app.use(commentRoutes);
 
 app.get("/*", function(req, res) {
    res.redirect("back"); 
