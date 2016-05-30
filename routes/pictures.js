@@ -67,7 +67,7 @@ router.get("/pictures/random", function(req, res){
             var random = Math.floor(Math.random() * pictures.length);
             var picture = pictures[random];
             console.log(picture);
-            res.render("show.ejs", {picture: picture, isRandom: true});
+            res.redirect("/pictures/" + picture.id);
         } 
     });
 });
@@ -78,7 +78,7 @@ router.get("/pictures/:id", function(req, res) {
         if(err){
             console.log(err);
         } else {
-            res.render("show.ejs", {picture: picture, isRandom: false});
+            res.render("show.ejs", {picture: picture});
         }
     });
 });
