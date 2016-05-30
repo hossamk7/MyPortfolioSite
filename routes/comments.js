@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router({mergeParams: true});
-var Picture = require("..models/picture");
+var Picture = require("../models/picture");
 var Comment = require("../models/comment");
 var authMiddleware = require("../middleware/authMiddleware");
 
@@ -16,7 +16,8 @@ router.post("/pictures/:id/comments", authMiddleware.isLoggedIn, function(req, r
         else {
             Comment.create(newComment, function(err, addedComment){
                 if(err){
-                    console.log(err);
+                    req.flash("flashRedMessage", "failed to delete comment");
+                    res.redirect("back");
                 } else {
                     picture.comments.push(addedComment);
                     picture.save();
@@ -37,7 +38,8 @@ router.delete("/pictures/:id/comments/:commentId", authMiddleware.checkCommentAu
         Comment.findByIdAndRemove(req.params.commentId, function(err){
             console.log("deleted comment: " + req.params.commentId);
             if(err){
-                console.log("delete error" + err);
+                req.flash("flashRedMessage", "failed to delete comment");
+                res.redirect("back");
             } else {
                 picture.comments.pull({_id: req.params.commentId});
                 picture.save();
@@ -51,7 +53,8 @@ router.put("/pictures/:id/comments/:commentId", authMiddleware.checkCommentAuth,
     var comment = {text: req.body.commentText, author: {id: req.user.id, username: req.user.username} };
     Comment.findByIdAndUpdate(req.params.commentId, comment, function(err, editedComment){
        if(err){
-           console.log("err");
+            req.flash("flashRedMessage", "failed to edit comment");
+            res.redirect("back");
        } else {
            console.log(editedComment);
            res.redirect("/pictures/" + req.params.id);
