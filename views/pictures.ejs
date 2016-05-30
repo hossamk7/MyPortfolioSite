@@ -2,8 +2,8 @@
 
     <div class="pic-tabs">
         <ul class="nav nav-tabs">
-            <li role="presentation" <% if(!all){ %> class="active" <% } %> ><a href='/pictures/recent'>Recently Added</a></li>
-            <li role="presentation" <% if(all){%> class="active" <% } %> ><a href='/pictures/all'>Show All</a></li>
+            <li role="presentation" <% if(activeTab === 'recently added'){ %> class="active" <% } %> ><a href='/pictures/recent'>Recently Added</a></li>
+            <li role="presentation" <% if(activeTab === 'show all'){ %> class="active" <% } %> ><a href='/pictures/all'>Show All</a></li>
             <li role="presentation"><a href='/pictures/random'>Random Picture</a></li>
             <a class="btn btn-primary pull-right" href="/pictures/new">Add New Picture</a>
         </ul>  

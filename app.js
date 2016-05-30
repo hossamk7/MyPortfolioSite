@@ -13,8 +13,8 @@ mongoose.connect("mongodb://localhost/my_travel_blog");
 app.use(bodyParser.urlencoded({extended: true})); 
 
 app.use(express.static(__dirname + "/public"));
-var multer = require("multer");
-var upload = multer({ dest: 'uploads/', fileFilter: fileFilter, limits: {fileSize: 5000000} });
+var upload = require("./middleware/fileUploadMulter.js");
+var authMiddleware = require("./middleware/authMiddleware.js");
 
 var User = require("./models/user");
 var Picture = require("./models/picture.js");
@@ -43,76 +43,11 @@ app.use(function(req, res, next){
   res.locals.currentUser = req.user;
   res.locals.flashRedMessage = req.flash("flashRedMessage");
   res.locals.flashGreenMessage = req.flash("flashGreenMessage");
-  res.locals.all = undefined;
+  res.locals.activeTab = undefined;
   next();
 });
 
-// ============= auth methods ===============
 
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    req.flash("flashRedMessage", "You must be logged in to perform this action.");
-    res.redirect("back");
-}
-
-function checkPictureAuth(req, res, next){
-    if(req.isAuthenticated()){
-        Picture.findById(req.params.id, function(err, picture) {
-            console.log(picture);
-            if(err){
-                req.flash("flashRedMessage", "Unable to find picture");
-                res.redirect("back");
-            } else if(picture.author.id.equals(req.user.id)){
-                return next();
-            } else {
-                req.flash("flashRedMessage", "You do not have permission to perform this action.");
-                res.redirect("back");
-            }
-        });
-    } else {
-        req.flash("flashRedMessage", "You must be logged in to perform this action.");
-        res.redirect("back");
-    }
-}
-
-function checkCommentAuth(req, res, next){
-    if(req.isAuthenticated()){
-        Comment.findById(req.params.commentId, function(err, comment) {
-            if(err){
-                req.flash("flashRedMessage", "Unable to find comment");
-                res.redirect("back");
-            } else if(comment.author.id.equals(req.user.id)){
-                return next();
-            } else {
-                req.flash("flashRedMessage", "You do not have permission to perform this action.");
-                res.redirect("back");
-            }
-        });
-    } else {
-        req.flash("flashRedMessage", "You must be logged in to perform this action.");
-        res.redirect("back");
-    }
-}
-
-function fileFilter (req, file, cb) {
-  // The function should call `cb` with a boolean 
-  // to indicate if the file should be accepted 
-  switch (file.mimetype) {
-      case 'image/jpeg':
-          cb(null, true);
-          break;
-      case 'image/png':
-          cb(null, true);
-          break;
-      case 'image/gif':
-          cb(null, true);
-          break;
-      default:
-          cb(null, false);
-  }
-}
 
 // ==========================  ROUTES BEGIN  ==============================
 
@@ -174,7 +109,7 @@ app.get("/pictures/all", function(req, res) {
        if(err){
            console.log(err);
        }else {
-           res.render("pictures.ejs", {pictures: pictures, all: true});
+           res.render("pictures.ejs", {pictures: pictures, activeTab: "show all"});
        }   
     });
 });
@@ -186,19 +121,19 @@ app.get("/pictures/recent", function(req, res) {
             res.redirect("/pictures/recent");
             console.log(err);
         } else {
-            res.render("pictures.ejs", {pictures: pictures, all: false});
+            res.render("pictures.ejs", {pictures: pictures, activeTab: "recently added"});
         }
     });
 });
 
 //render the new picture form
-app.get("/pictures/new", isLoggedIn, function(req, res) {
+app.get("/pictures/new", authMiddleware.isLoggedIn, function(req, res) {
    res.render("new.ejs");
 });
 
 
 //add new pic
-app.post("/pictures", isLoggedIn, upload.single('upload'), function(req, res){
+app.post("/pictures", authMiddleware.isLoggedIn, upload.single('upload'), function(req, res){
     if(req.file){
         var fileExt = path.extname(req.file.originalname);
         var fileName = req.file.filename + fileExt;
@@ -245,7 +180,7 @@ app.get("/pictures/:id", function(req, res) {
 });
 
 //render edit page
-app.get("/pictures/:id/edit", checkPictureAuth, function(req, res){
+app.get("/pictures/:id/edit", authMiddleware.checkPictureAuth, function(req, res){
     Picture.findById(req.params.id, function(err, pic){
        if(err){
            console.log("error " + err);
@@ -256,7 +191,7 @@ app.get("/pictures/:id/edit", checkPictureAuth, function(req, res){
 });
 
 //edit the picture
-app.put("/pictures/:id/edit", checkPictureAuth, function(req, res){
+app.put("/pictures/:id/edit", authMiddleware.checkPictureAuth, function(req, res){
     console.log(req.params.id);  
     Picture.findByIdAndUpdate(req.params.id, req.body.picture, function(err, picture) {
       if(err){
@@ -271,7 +206,7 @@ app.put("/pictures/:id/edit", checkPictureAuth, function(req, res){
 
 
 //delete a picture
-app.delete("/pictures/:id", checkPictureAuth, function(req, res) {
+app.delete("/pictures/:id", authMiddleware.checkPictureAuth, function(req, res) {
    Picture.findByIdAndRemove(req.params.id, function(err, picture){
        if(err){
            console.log("couldn't delete picture");
@@ -292,7 +227,7 @@ app.get("/pictures/find/:username", function(req, res) {
         if(err){
             console.log("err" + err);
         } else {
-            res.render("pictures.ejs", {pictures: pictures, flashGreenMessage: "Showing pictures added by " + req.params.username});
+            res.render("pictures.ejs", {pictures: pictures, flashGreenMessage: "Showing pictures added by " + req.params.username });
         }
     });
 });
@@ -301,7 +236,7 @@ app.get("/pictures/find/:username", function(req, res) {
 
 // ================ COMMENTS ROUTES =======================
 
-app.post("/pictures/:id/comments", isLoggedIn, function(req, res) {
+app.post("/pictures/:id/comments", authMiddleware.isLoggedIn, function(req, res) {
     var author = { id: req.user.id, username: req.user.username };
     var newComment = { text: req.body.text, author: author };
     
@@ -324,7 +259,7 @@ app.post("/pictures/:id/comments", isLoggedIn, function(req, res) {
     });
 });
 
-app.delete("/pictures/:id/comments/:commentId", checkCommentAuth, function(req, res) {
+app.delete("/pictures/:id/comments/:commentId", authMiddleware.checkCommentAuth, function(req, res) {
     
     Picture.findById(req.params.id, function(err, picture) {
         if(err){
@@ -343,7 +278,7 @@ app.delete("/pictures/:id/comments/:commentId", checkCommentAuth, function(req, 
     });
 });
 
-app.put("/pictures/:id/comments/:commentId", checkCommentAuth, function(req, res){
+app.put("/pictures/:id/comments/:commentId", authMiddleware.checkCommentAuth, function(req, res){
     var comment = {text: req.body.commentText, author: {id: req.user.id, username: req.user.username} };
     Comment.findByIdAndUpdate(req.params.commentId, comment, function(err, editedComment){
        if(err){
