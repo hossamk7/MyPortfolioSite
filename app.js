@@ -35,7 +35,7 @@ passport.use(User.createStrategy()); //passport-local-mongoose implementation of
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use(methodOverride("_method")); //override post in html to desired http method
+app.use(methodOverride("_method")); //middleware to override POST method in html to desired http method
 app.use(connectFlash());
 
 //set local variables for all views to have.
@@ -128,7 +128,6 @@ app.post("/signup", function(req, res) {
         username: req.body.username,
         email: req.body.email
     });
-    
     User.register(newUser, req.body.password, function(err, user){
         if(err){
             console.log(err);
@@ -207,13 +206,27 @@ app.post("/pictures", isLoggedIn, upload.single('upload'), function(req, res){
     }
 });
 
+
+app.get("/pictures/random", function(req, res){
+    Picture.find({}).populate("comments").exec(function(err, pictures){
+        if(err){
+            console.log(err); 
+        }else {
+            var random = Math.floor(Math.random() * pictures.length);
+            var picture = pictures[random];
+            console.log(picture);
+            res.render("show.ejs", {picture: picture, isRandom: true});
+        } 
+    });
+});
+
 //show a single pic in full view
 app.get("/pictures/:id", function(req, res) {
     Picture.findById(req.params.id).populate("comments").exec(function(err, picture){
         if(err){
             console.log(err);
         } else {
-            res.render("show.ejs", {picture: picture});
+            res.render("show.ejs", {picture: picture, isRandom: false});
         }
     });
 });
@@ -242,6 +255,8 @@ app.put("/pictures/:id/edit", checkPictureAuth, function(req, res){
    }); 
 });
 
+
+
 //delete a picture
 app.delete("/pictures/:id", checkPictureAuth, function(req, res) {
    Picture.findByIdAndRemove(req.params.id, function(err, picture){
@@ -259,8 +274,8 @@ app.delete("/pictures/:id", checkPictureAuth, function(req, res) {
    });
 });
 
-app.get("/pictures/find/mypictures", isLoggedIn, function(req, res) {
-    Picture.find({"author.username": req.user.username}, function(err, pictures) {
+app.get("/pictures/find/:username", function(req, res) {
+    Picture.find({"author.username": req.params.username}, function(err, pictures) {
         if(err){
             console.log("err" + err);
         } else {
@@ -268,7 +283,6 @@ app.get("/pictures/find/mypictures", isLoggedIn, function(req, res) {
         }
     });
 });
-
 
 // ================ COMMENTS ROUTES =======================
 

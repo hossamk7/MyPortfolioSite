@@ -1,11 +1,20 @@
 <% include partials/header.ejs %>
 
+<% if(isRandom) { %>
+    <div class="col-md-2 col-sm-1 pull-right random-button">
+        <a class="btn btn-sm btn-info" href="/pictures/random">Next Random Picture</a>
+    </div>
+<% } %>
+
 <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
     <div class="thumbnail">
-        <img class="img-fluid" src="<%=picture.imageLink%>">
-        <div id="picture-text">
+        <img class="img-responsive" src="<%=picture.imageLink%>">
+        <div class="picture-text">
             <div class="pull-right">
-                <span><em>Added by</em> <a href="#"><%=picture.author.username%></a> </span>
+                <span>
+                    <em>Added by</em>
+                    <a href="/pictures/find/<%=picture.author.username%>"><%=picture.author.username%></a>
+                </span>
                 <div><%=picture.created.toDateString()%></div>
             </div>
             <h3><%=picture.name%></h3>
@@ -34,7 +43,9 @@
        
         <hr>
         <div class="comment">
-            <strong><a href="#"><%=picture.comments[i].author.username %></a></strong>
+            <strong>
+                <a href="/pictures/find/<%=picture.comments[i].author.username%>"><%=picture.comments[i].author.username %></a>
+            </strong>
             <span>
                 <% if(currentUser && picture.comments[i].author.id.equals(currentUser.id)) { %>
                 <form class="pull-right delete-button" action="/pictures/<%=picture.id%>/comments/<%=picture.comments[i].id%>?_method=DELETE" method="POST">
@@ -61,5 +72,7 @@
         <% } %>
     </div>
 </div>
+
+
 
 <% include partials/footer.ejs %>

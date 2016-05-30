@@ -32,12 +32,12 @@
     display: inline;
 }
 
-#picture-text{
-    margin: 15px;
+.picture-text{
+    margin: 15px 15px 25px 15px;
 }
 
-#picture-text .pull-right{
-    display: inline;
+.picture-text .pull-right {
+    text-align: right;
 }
 
 .delete-button{
@@ -97,4 +97,8 @@ textarea {
 
 .thumbnail img {
     width: 100%;
+}
+
+.random-button {
+    margin-bottom: 10px;
 }
