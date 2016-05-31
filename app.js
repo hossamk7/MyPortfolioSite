@@ -15,6 +15,7 @@ var commentRoutes = require("./routes/comments");
 mongoose.connect("mongodb://localhost/my_travel_blog");
 app.use(bodyParser.urlencoded({extended: true})); 
 app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/web_pages"));
 
 //PASSPORT CONFIG
 app.use(expressSession({
