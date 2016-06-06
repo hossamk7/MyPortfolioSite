@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hossam Khedr</title>
+	<link href='https://fonts.googleapis.com/css?family=Ubuntu:500' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="home.css">
+</head>
+<body>
+<div class="top-bar"></div>
+	<div class="navbar">
+		<a href="HossamKhedrCV2016.docx">CV</a>
+		<a href="https://github.com/hossamk7">GitHub</a>
+		<a href="#"> Contact </a>
+		<div class="drop-down">
+			<div>Email: hossamk@hotmail.co.uk</div> 
+			<hr>
+			<div>Telephone: <br>07428004126</div>
+		</div>
+	</div>
+	
+	<div class="container">
+
+		<div class="header">
+			<h1>Hossam Khedr</h1>
+			<h3>Junior Developer</h3>
+			<span> HTML / CSS / JavaScript / Bootstrap / NodeJS (express) / Java / SQL  </span>
+		</div>
+
+		<div class="main-text"> <p>Hi I'm Hossam. I graduated with a 2:1 degree in Computer Science from UEA in 2011. I have since been working in travel and hospitality and last year, was working in China as an English teacher. I'm now looking to get back in to tech as a web developer and have been using online resources to practise with common modern technologies for web development. I enjoy being creative, writing code, and love learning. Interested in continuous learning and would like to take on a role where I can develop my skills.</p> 
+		</div>
+
+		<h2>
+			<a href="#scroll">Portfolio</a>
+		</h2>
+
+		<div id="scroll" class="polaroid">
+			<a href="/pictures">
+				<img src="Screenshot (21).png">	
+			</a>
+			<div class="polaroid-info">
+				<p>
+					<h3><a href="/pictures">Pix</a></h3>
+					Picture sharing website made with NodeJS, Express, MongoDB, Mongoose, Bootstrap, JQuery and other NodeJS packages. Features include user accounts, user comments and picture uploads.
+				</p>
+			</div>
+		</div>	
+		<div class="polaroid">
+			<a href="/rgbgame/rgbGame.html">
+				<img src="Screenshot (11).png">
+			</a>
+			<div class="polaroid-info">
+				<p>
+					<h3><a href="/rgbgame/rgbGame.html">RGB Colour Game</a></h3>
+				</p>
+					Try to guess the colour based on the RGB value. Made with HTML, CSS and Vanilla JavaScript.
+					Inspired by <a href="http://www.rgbchallenge.com/"> rgbchallenge.com </a>. Part of an online web development course I took on Udemy.
+			</div>
+		</div>
+		
+		<div class="polaroid">
+			<a href="/taptone/taptone.html">
+				<img src="Screenshot (20).png">
+			</a>
+			<div class="polaroid-info">
+				<p>
+					<h3><a href="/taptone/taptone.html">Tap Tone</a></h3>
+				</p>
+				<p> A clone of <a href="http://patatap.com"> patatap.com</a>. Each key press plays a different sound and animation. Built with PaperJS and HowlerJS. <em> This currently only works on desktop devices. </em> </p>
+			</div>
+		</div>
+		
+		<div id="footer">
+			HK 2016
+		</div>
+	</div>
+	<script type="text/javascript">
+
+		var dropDown = document.querySelector(".drop-down");
+		var contactButton = document.querySelector(".navbar a:nth-of-type(3)");
+
+		document.querySelector("body").addEventListener("click", function(){
+			dropDown.classList.remove("show");
+		});
+
+		dropDown.addEventListener("click", function(e){
+			dropDown.classList.add("show");
+			e.stopPropagation();
+		});
+
+		contactButton.addEventListener("click", function(e){
+			dropDown.classList.toggle("show");
+			e.stopPropagation();
+		});
+
+	</script>
+
+</body>
+</html>
