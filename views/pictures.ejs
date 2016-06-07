@@ -18,7 +18,7 @@
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 img-responsive">
             <div class="thumbnail text-center">
                 <strong><%= pictures[i].name%></strong>
-                <img src="<%=pictures[i].imageLink%>">
+                <a href="/pictures/<%=pictures[i]._id%>"><img src="<%=pictures[i].imageLink%>"></a>
                 <a class="btn btn-info btn-block" href="/pictures/<%=pictures[i]._id%>"> More Info </a>
             </div>
         </div>
