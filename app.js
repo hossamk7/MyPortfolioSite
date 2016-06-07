@@ -12,7 +12,8 @@ var pictureRoutes = require("./routes/pictures");
 var indexRoutes = require("./routes/index");
 var commentRoutes = require("./routes/comments");
 
-mongoose.connect("mongodb://localhost/my_travel_blog");
+//mongoose.connect("mongodb://localhost/my_travel_blog");
+mongoose.connect(process.env.DATABASEURL);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
 app.use(express.static(__dirname + "/web_pages"));
@@ -54,4 +55,5 @@ app.get("/*", function(req, res) {
 
 app.listen(process.env.PORT, process.env.IP, function(req, res){
     console.log("----- server started -----");
+    console.log(process.env.DATABASEURL);
 });
