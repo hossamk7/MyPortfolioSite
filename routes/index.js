@@ -3,11 +3,7 @@ var router = express.Router({mergeParams: true});
 var User = require("../models/user");
 var passport = require("passport");
 
-router.get("/", function(req, res) {
-   res.redirect("/portfolio/home.html"); 
-});
-
-router.get("/pictures", function(req, res){
+router.get("/", function(req, res){
     res.render("landing.ejs");
 });
 
