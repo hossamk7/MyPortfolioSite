@@ -109,10 +109,17 @@ textarea {
 }
 
 .jumbotron { 
-    background: url('https://images.unsplash.com/photo-1452215199360-c16ba37005fe?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=408c70a6e88b50949c51e26424ff64f3');
+    background: url('/images/jumbotron.jpg');
     background-size: cover;
+    color: white;
 }
 
 h2 {
     font-family: monospace;
+}
+
+@media (max-width: 600px) {
+    .nav-tabs .btn-primary {
+        width: 100%;
+    }
 }

@@ -1,7 +1,7 @@
 {
   "name": "my-travel-blog",
   "version": "1.0.0",
-  "description": "travel blog site for my portfolio",
+  "description": "simple  picture sharing app",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -25,10 +25,10 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hossamk7/MyTravelBlog.git"
+    "url": "git+https://github.com/hossamk7/pix-app.git"
   },
   "bugs": {
-    "url": "https://github.com/hossamk7/MyTravelBlog/issues"
+    "url": "https://github.com/hossamk7/pix-app/issues"
   },
-  "homepage": "https://github.com/hossamk7/MyTravelBlog#readme"
+  "homepage": "https://github.com/hossamk7/pix-app#readme"
 }
