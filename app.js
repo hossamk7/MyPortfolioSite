@@ -12,8 +12,8 @@ var pictureRoutes = require("./routes/pictures");
 var indexRoutes = require("./routes/index");
 var commentRoutes = require("./routes/comments");
 
-//mongoose.connect("mongodb://localhost/my_travel_blog");
-mongoose.connect(process.env.DATABASEURL);
+mongoose.connect("mongodb://localhost/my_travel_blog");
+//mongoose.connect(process.env.DATABASEURL);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
 

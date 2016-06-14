@@ -3,6 +3,7 @@ body{
     background: url("/images/unsplashBackground.jpeg");
     color: white;
     background-size: cover;
+    background-position: center;
 }
 
 h1{
